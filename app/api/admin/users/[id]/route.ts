@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { users, audit_logs } from '@/lib/db/schema';
 import { verifySession } from '@/lib/auth/dal';
-import { hasPermission } from '@/lib/auth/permissions';
+import { hasPermission, Role } from '@/lib/auth/permissions';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,7 +15,7 @@ const updateUserSchema = z.object({
 export async function PUT(req: NextRequest, ctx: any) {
   try {
     const session = await verifySession();
-    if (!session || !hasPermission(session.role, 'user:manage')) {
+    if (!session || !hasPermission(session.role as Role, 'user:manage')) {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -53,7 +53,7 @@ export async function PUT(req: NextRequest, ctx: any) {
 export async function DELETE(req: NextRequest, ctx: any) {
   try {
     const session = await verifySession();
-    if (!session || !hasPermission(session.role, 'user:manage')) {
+    if (!session || !hasPermission(session.role as Role, 'user:manage')) {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 

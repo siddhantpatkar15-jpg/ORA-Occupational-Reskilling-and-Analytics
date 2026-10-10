@@ -94,13 +94,16 @@ export function Select({
 export function SelectTrigger({
   children,
   className = '',
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
   const context = React.useContext(SelectContext);
   return (
     <button
+      id={id}
       type="button"
       onClick={() => context?.setOpen((prev) => !prev)}
       className={`flex h-10 w-full items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:cursor-not-allowed disabled:opacity-50 text-slate-900 ${className}`}

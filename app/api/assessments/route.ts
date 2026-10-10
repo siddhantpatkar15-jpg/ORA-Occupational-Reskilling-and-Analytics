@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { assessments } from '@/lib/db/schema';
 import { verifySession } from '@/lib/auth/dal';
-import { hasPermission } from '@/lib/auth/permissions';
+import { hasPermission, Role } from '@/lib/auth/permissions';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await verifySession();
-    if (!session || !hasPermission(session.role, 'assessment:create')) {
+    if (!session || !hasPermission(session.role as Role, 'assessment:create')) {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 

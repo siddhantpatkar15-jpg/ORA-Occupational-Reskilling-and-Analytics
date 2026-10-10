@@ -18,3 +18,4 @@ export * from './dialog';
 export * from './dropdown-menu';
 export * from './progress';
 export * from './radio-group';
+export * from './logo';

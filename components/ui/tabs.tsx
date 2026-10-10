@@ -9,14 +9,28 @@ interface TabsContextType {
 
 const TabsContext = React.createContext<TabsContextType | null>(null);
 
-export function Tabs({ value, onValueChange, children, className = '' }: { 
-  value: string; 
-  onValueChange: (value: string) => void; 
+export interface TabsProps {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
   children: React.ReactNode;
   className?: string;
-}) {
+}
+
+export function Tabs({ value: controlledValue, defaultValue, onValueChange, children, className = '' }: TabsProps) {
+  const [internalValue, setInternalValue] = React.useState<string>(defaultValue || '');
+  const isControlled = controlledValue !== undefined;
+  const activeValue = isControlled ? controlledValue : internalValue;
+
+  const handleValueChange = React.useCallback((newValue: string) => {
+    if (!isControlled) {
+      setInternalValue(newValue);
+    }
+    onValueChange?.(newValue);
+  }, [isControlled, onValueChange]);
+
   return (
-    <TabsContext.Provider value={{ value, onValueChange }}>
+    <TabsContext.Provider value={{ value: activeValue, onValueChange: handleValueChange }}>
       <div className={className}>{children}</div>
     </TabsContext.Provider>
   );
