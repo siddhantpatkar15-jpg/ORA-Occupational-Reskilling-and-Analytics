@@ -22,7 +22,12 @@ async function handleLogin(prevState: any, formData: FormData) {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await res.json();
+    let data: any = {};
+    try {
+      data = await res.json();
+    } catch {
+      return { error: 'Server connection error. Please try again.' };
+    }
 
     if (!res.ok) {
       return { error: data.error || 'Invalid credentials' };

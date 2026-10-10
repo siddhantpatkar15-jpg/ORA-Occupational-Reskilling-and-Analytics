@@ -74,7 +74,12 @@ export default function RegisterPage() {
         }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: 'Server response error. Please try again.' };
+      }
 
       if (!res.ok) {
         setError(data.error || 'Registration failed. Please try again.');
